@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clinical-trials-data"
+version = "0.1.0.dev0"
+description = "Extract Clinical Data GOV data"
+requires-python = ">=3.12"
+authors = [{ name = "Patricio Fernandez" }]
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+dependencies = ["pip >=21.2"]
+
+[project.urls]
+repository = "https://github.com/patofw/clinical-trials-data.git"
+
+[project.optional-dependencies]
+test = ["pyprojroot", "pytest", "pytest-mock"]
+
+[tool.setuptools.packages.find]
+# Explicit src-layout
+where = ["src"]
+namespaces = false
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+extend-exclude = [".ipynb_checkpoints"]
+
+[tool.ruff.lint]
+# order matches https://docs.astral.sh/ruff/rules
+select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+    # mccabe
+    "C90",
+    # isort
+    "I",
+    # pydocstyle
+    "D",
+    # flake8-bugbear
+    "B",
+    "B9",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-logging-format
+    "G",
+    # flake8-self
+    "SLF",
+    # flake8-simplify
+    "SIM",
+    # flake8-use-pathlib
+    "PTH",
+    # NumPy-specific
+    "NPY",
+    # Ruff-specific
+    "RUF0",
+    "RUF100", # = noqa-require-code
+
+]
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+    "E501", # Replaced with B950, Hard line-length limit
+
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+# ignore unused imports (F401) in all `__init__.py` files
+"__init__.py" = ["F401"]
+# ignore pydocstyle rules for tests
+"tests/*" = ["D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["setuptools", "ruamel.yaml", "ruamel"]
+ignore_missing_imports = true

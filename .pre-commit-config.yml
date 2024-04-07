@@ -1,0 +1,62 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks # misc hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: end-of-file-fixer
+        exclude: \.svg$
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python # check editorconfig compliance
+    rev: 2.7.3
+    hooks:
+      - id: editorconfig-checker
+        alias: ec
+        exclude: ^dvc\.lock|\.(ipynb|svg|dvc)|conda-lock.*\.yml$
+  - repo: https://github.com/pre-commit/mirrors-prettier # code formatter for json, yaml, markdown
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        language_version: 16.19.0
+        additional_dependencies:
+          - prettier@2.7.1
+          - prettier-plugin-toml@0.3.1
+        exclude: ^conda-lock.*\.yml$
+  - repo: https://github.com/thoughtworks/talisman # check secrets are not being committed
+    rev: "v1.32.0"
+    hooks:
+      - id: talisman-commit
+        entry: cmd --githook pre-commit
+  - repo: https://github.com/astral-sh/ruff-pre-commit # static linting, styling, and formatting
+    rev: v0.3.5
+    hooks:
+      - id: ruff
+      - id: ruff-format
+  - repo: https://github.com/asottile/pyupgrade # auto-upgrade syntax
+    rev: v3.15.2
+    hooks:
+      - id: pyupgrade
+        alias: pyupgrade-core
+        args: ["--py312-plus"]
+  # local hook definitions
+  - repo: local
+    hooks:
+      - id: mypy # type checking
+        name: mypy
+        entry: conda run --live-stream -n clinical-trials-gov-data-dev mypy
+        language: system
+        types_or: [python, pyi]
+        args: ["--scripts-are-modules"]
+        require_serial: true
+        exclude: "tests"
+      - id: sphinx
+        name: sphinx docs
+        language: system
+        require_serial: true
+        files: ^src/clinical_trials_gov_data/
+        pass_filenames: false
+        entry: conda run --live-stream -n clinical-trials-gov-data-dev sphinx-apidoc
+        args: ["-f", "-o", "docs/source/", "src/clinical_trials_gov_data/"]
+        exclude: "tests"

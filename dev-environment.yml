@@ -1,0 +1,18 @@
+name: clinical-trials-gov-data-dev
+channels:
+  - conda-forge
+  - nodefaults
+category: dev
+dependencies:
+  - jupyterlab
+  - mypy
+  - pre-commit
+  - pyprojroot
+  - pytest
+  - pytest-cov
+  - pytest-mock
+  - python-dotenv
+  - ruamel.yaml
+  - sphinx
+  - pip:
+      - adr-tools-python

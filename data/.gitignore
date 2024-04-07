@@ -1,0 +1,13 @@
+# Ignore all files in all sub-directories
+**/*
+# But not the sub-directories themselves
+!**/
+# But not files in this directory
+!/*
+
+# Include git files
+!.gitignore
+!.gitkeep
+
+# Includa any dvc files
+!*.dvc
